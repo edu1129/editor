@@ -14,3 +14,14 @@ pip-selfcheck.json
 # OS-specific
 .DS_Store
 Thumbs.db
+
+# Python byte-compiled files
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+
+# Editor backup files
+*.swp
+*~
