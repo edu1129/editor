@@ -1,68 +1,61 @@
 #!/bin/bash
 
-# Script ko error aane par exit karne ke liye
-set -e
+echo "=========================================="
+echo "    'add' - The AI Text Editor Installer"
+echo "=========================================="
+echo
 
-echo ">>> 'add' Text Editor Installation for Termux <<<"
-echo ""
-
-# Termux ke liye zaroori packages
-echo "1. Checking and installing required Termux packages..."
-echo "   Updating package lists..."
-pkg update -y
-
-echo "   Installing X11 repository (for GUI support)..."
-pkg install -y x11-repo
-
-echo "   Installing Python, Tkinter support (tk), and Git..."
-pkg install -y python tk git
-
-echo "   Required packages are installed."
-echo ""
-
-# Script ke current directory ko find karein
-INSTALL_DIR="$(pwd)"
-echo "2. Installation directory: $INSTALL_DIR"
-echo ""
-
-echo "3. Installing Python dependencies from requirements.txt..."
-# YAHAN BADLAV KIYA GAYA HAI: pip upgrade wali line hata di gayi hai.
-pip install -r "$INSTALL_DIR/requirements.txt"
-echo "   Python dependencies installed successfully."
-echo ""
-
-# Main editor script ka path
-EDITOR_SCRIPT="$INSTALL_DIR/editor.py"
-
-# Command ka naam
-COMMAND_NAME="add"
-# Termux mein installation path $PREFIX/bin hota hai
-INSTALL_PATH="$PREFIX/bin/$COMMAND_NAME"
-
-echo "4. Creating the '$COMMAND_NAME' command at $INSTALL_PATH..."
-
-# Ek wrapper script banayein jo editor ko python3 ke saath run karega
-cat > "$INSTALL_PATH" <<EOF
-#!/bin/bash
-# Yeh script 'add' command ko run karne ke liye hai.
-# Yeh editor.py ko sahi Python interpreter ke saath run karta hai
-# aur saare command-line arguments (\$@) pass karta hai.
-# Termux GUI ke liye DISPLAY variable zaroori ho sakta hai.
-if [ -z "\$DISPLAY" ]; then
-    export DISPLAY=":1"
+# System-specific installation
+if [[ -d /data/data/com.termux ]]; then
+    echo "[*] Termux environment detect hua."
+    echo "[*] Zaroori packages install kiye jaa rahe hain..."
+    pkg update -y && pkg upgrade -y
+    pkg install python git -y
+    INSTALL_DIR="/data/data/com.termux/files/usr/bin"
+else
+    echo "[*] Standard Linux environment detect hua."
+    echo "[*] Zaroori packages install kiye jaa rahe hain..."
+    if ! command -v sudo &> /dev/null; then
+        echo "[Error] 'sudo' command nahi mila. Kripya 'sudo' install karein."
+        exit 1
+    fi
+    sudo apt update -y && sudo apt upgrade -y
+    sudo apt install python3 python3-pip git -y
+    INSTALL_DIR="/usr/local/bin"
 fi
-python3 "$EDITOR_SCRIPT" "\$@"
-EOF
 
-echo "5. Making the command executable..."
-chmod +x "$INSTALL_PATH"
-echo ""
+# Install Python dependencies
+echo
+echo "[*] Python libraries (pip) install ki jaa rahi hain..."
+pip install -r requirements.txt
+if [ $? -ne 0 ]; then
+    echo "[Error] Python libraries install nahi ho payi. Kripya 'pip' aur internet connection check karein."
+    exit 1
+fi
 
-echo "✅ Installation Complete!"
-echo ""
-echo "IMPORTANT: Is editor ko chalane ke liye aapko ek X11/VNC server ki zaroorat hai."
-echo "Agar setup nahi hai, to README.md file padhein."
-echo ""
-echo "You can now run the editor from anywhere by typing:"
-echo "   add [filename]"
-echo "Example: add hello.txt"
+# Make the editor script executable
+chmod +x editor.py
+
+# Create a symbolic link to make it a global command.
+echo "[*] 'add' command set ki jaa rahi hai..."
+SCRIPT_PATH=$(realpath editor.py)
+
+if [[ -d /data/data/com.termux ]]; then
+    ln -sf "$SCRIPT_PATH" "$INSTALL_DIR/add"
+else
+    sudo ln -sf "$SCRIPT_PATH" "$INSTALL_DIR/add"
+fi
+
+if [ $? -ne 0 ]; then
+    echo "[Error] Command banane me fail. Kripya check karein ki aapke paas permissions hain."
+    exit 1
+fi
+
+echo
+echo "=========================================="
+echo "   Installation Poora Hua! 🎉"
+echo "=========================================="
+echo "Ab aap naya terminal session shuru karke editor ka istemal kar sakte hain:"
+echo
+echo "    add your_file_name.txt"
+echo
