@@ -12,7 +12,11 @@
 - **Rename File**: `CTRL + R` se current file ko rename karein.
 - **First-Time Setup**: Pehli baar istemal karne par, editor aapse Gemini API Key aur Model Name poochega.
 
-## Installation (Linux / macOS)
+## Installation
+
+The installation script automatically detects your environment (Linux/macOS vs. Termux) and installs accordingly.
+
+### For Linux / macOS
 
 1.  **Repository Clone Karein:**
     ```bash
@@ -28,8 +32,32 @@
     sudo bash install.sh
     ```
 
-3.  **Ho Gaya!**
-    Ab aap terminal mein `add` command ka istemal kar sakte hain.
+### For Termux (Android)
+
+1.  **Repository Clone Karein:**
+    ```bash
+    git clone <your-repo-url>
+    cd add-editor
+    ```
+
+2.  **Installation Script Run Karein:**
+    Termux mein `sudo` ki zaroorat nahi hai.
+    ```bash
+    chmod +x install.sh
+    bash install.sh
+    ```
+
+3.  **GUI Setup (Zaroori):**
+    Termux mein GUI applications chalaane ke liye aapko ek X11 server ki zaroorat hogi.
+    -   Apne Android device par ek X11 server app install karein (jaise XServer XSDL).
+    -   Termux mein, `DISPLAY` environment variable set karein:
+        ```bash
+        export DISPLAY=:0
+        ```
+    -   Yeh command aap har baar Termux session shuru karne par daal sakte hain, ya apne `.bashrc` mein add kar sakte hain.
+
+## Ho Gaya!
+Ab aap terminal mein `add` command ka istemal kar sakte hain.
 
 ## Usage
 

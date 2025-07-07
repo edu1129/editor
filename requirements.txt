@@ -1,3 +1,2 @@
 # Add your project dependencies here
-# Example: Pillow
-# Pillow==9.0.0
+google-generativeai
