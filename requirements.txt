@@ -1,2 +1,4 @@
-# Add your project dependencies here
 google-generativeai
+python-dotenv
+prompt-toolkit
+rich
