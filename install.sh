@@ -15,7 +15,6 @@ echo "   Installing X11 repository (for GUI support)..."
 pkg install -y x11-repo
 
 echo "   Installing Python, Tkinter support (tk), and Git..."
-# YAHAN BADLAV KIYA GAYA HAI: 'python-tkinter' ko 'tk' se badal diya gaya hai
 pkg install -y python tk git
 
 echo "   Required packages are installed."
@@ -27,7 +26,7 @@ echo "2. Installation directory: $INSTALL_DIR"
 echo ""
 
 echo "3. Installing Python dependencies from requirements.txt..."
-pip install --upgrade pip
+# YAHAN BADLAV KIYA GAYA HAI: pip upgrade wali line hata di gayi hai.
 pip install -r "$INSTALL_DIR/requirements.txt"
 echo "   Python dependencies installed successfully."
 echo ""
