@@ -1,37 +1,16 @@
-# Byte-compiled / optimized / DLL files
+# Python
 __pycache__/
 *.pyc
-*.pyd
 *.pyo
-
-# Distribution / packaging
+*.pyd
 .Python
-build/
-dist/
-wheels/
-*.egg-info/
-
-# Installer logs
-*.log
-
-# Unit test / coverage reports
-.coverage
-.tox/
-nosetests.xml
-coverage.xml
-htmlcov/
-.report.json
-
-# Virtual environment
-venv/
-.venv/
 env/
-.env/
+venv/
+pip-selfcheck.json
 
-# Editors
-.vscode/
-.idea/
+# User-specific config
+.add_editor_config.json
 
-# OS files
+# OS-specific
 .DS_Store
-thumbs.db
+Thumbs.db
